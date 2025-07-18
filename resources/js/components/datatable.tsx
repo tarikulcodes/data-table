@@ -60,7 +60,11 @@ export function DataTable<TData, TValue>({ columns, data, paginatedData }: DataT
                 </Table>
             </div>
 
-            <div className="mt-4">{paginatedData && <DataTablePagination table={table} paginatedData={paginatedData} />}</div>
+            {paginatedData && (
+                <div className="mt-4">
+                    <DataTablePagination table={table} paginatedData={paginatedData} />
+                </div>
+            )}
         </div>
     );
 }
