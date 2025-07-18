@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -10,9 +12,24 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Inertia::render('users/index');
+        $queryParams = request()->only(['search', 'page', 'per_page', 'sort_by', 'sort_dir']) + ['sort_by' => 'id', 'sort_dir' => 'desc', 'per_page' => 10, 'page' => 1];
+
+        $users = User::query()
+            ->when($request->search, function ($query, $search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%');
+            })
+            ->orderBy($queryParams['sort_by'], $queryParams['sort_dir'])
+            ->paginate($queryParams['per_page'])
+            ->withQueryString();
+
+        return Inertia::render('users/index', [
+            'usersData' => UserResource::collection($users)->additional([
+                'queryParams' => $queryParams,
+            ]),
+        ]);
     }
 
     /**

@@ -32,6 +32,44 @@ export interface SharedData {
     [key: string]: unknown;
 }
 
+export interface QueryParams {
+    search?: string;
+    page?: number;
+    per_page?: number;
+    sort_by?: string;
+    sort_dir?: string;
+    [key: string]: unknown;
+}
+
+export interface PaginationMeta {
+    current_page: number;
+    from: number;
+    last_page: number;
+    per_page: number;
+    to: number;
+    total: number;
+    links: {
+        url: string | null;
+        label: string;
+        active: boolean;
+    }[];
+    [key: string]: unknown;
+}
+
+export interface SimplePaginationLinks {
+    first: string;
+    last: string;
+    next: string | null;
+    prev: string | null;
+}
+
+export interface PaginatedData<T> {
+    data: T[];
+    queryParams?: QueryParams;
+    meta?: PaginationMeta;
+    links?: SimplePaginationLinks;
+}
+
 export interface User {
     id: number;
     name: string;
@@ -40,5 +78,5 @@ export interface User {
     email_verified_at: string | null;
     created_at: string;
     updated_at: string;
-    [key: string]: unknown; // This allows for additional properties...
+    [key: string]: unknown;
 }
