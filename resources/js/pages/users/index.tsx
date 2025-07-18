@@ -5,8 +5,6 @@ import { Head } from '@inertiajs/react';
 import { Plus } from 'lucide-react';
 
 const UsersIndex = ({ usersData }: { usersData: PaginatedData<User> }) => {
-    const { data: users, queryParams, meta, links } = usersData;
-
     return (
         <AppLayout
             breadcrumbs={[
