@@ -7,11 +7,13 @@ import { NavigationMenu, NavigationMenuItem, NavigationMenuList, navigationMenuT
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { UserMenuContent } from '@/components/user-menu-content';
+import { Appearance, useAppearance } from '@/hooks/use-appearance';
 import { useInitials } from '@/hooks/use-initials';
 import { cn } from '@/lib/utils';
 import { type BreadcrumbItem, type NavItem, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, Home, LogIn, Menu, User, UserPlus, Users } from 'lucide-react';
+import { Separator } from '@radix-ui/react-separator';
+import { BookOpen, Home, LogIn, Menu, Monitor, Moon, Sun, User, UserPlus, Users } from 'lucide-react';
 import { FiGithub } from 'react-icons/fi';
 import AppLogo from './app-logo';
 import AppLogoIcon from './app-logo-icon';
@@ -154,6 +156,8 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                                     </TooltipProvider>
                                 ))}
                             </div>
+                            <Separator orientation="vertical" className="block h-5 min-h-5 w-0.5 bg-border" />
+                            <ThemeSwitcher />
                         </div>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
@@ -206,5 +210,45 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                 </div>
             )}
         </>
+    );
+}
+
+// TODO: Add a tooltip to the theme switcher
+function ThemeSwitcher() {
+    const { appearance, updateAppearance } = useAppearance();
+
+    const handleThemeChange = (theme: Appearance) => {
+        switch (theme) {
+            case 'system':
+                updateAppearance('light');
+                break;
+            case 'light':
+                updateAppearance('dark');
+                break;
+            case 'dark':
+                updateAppearance('system');
+                break;
+        }
+    };
+
+    return (
+        <TooltipProvider delayDuration={0}>
+            <Tooltip>
+                <TooltipTrigger asChild className="cursor-pointer">
+                    <Button variant="ghost" size="icon" className="size-9" onClick={() => handleThemeChange(appearance)}>
+                        {appearance === 'light' ? (
+                            <Sun className="size-5" />
+                        ) : appearance === 'dark' ? (
+                            <Moon className="size-5" />
+                        ) : appearance === 'system' ? (
+                            <Monitor className="size-5" />
+                        ) : (
+                            ''
+                        )}
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent className="capitalize">{appearance}</TooltipContent>
+            </Tooltip>
+        </TooltipProvider>
     );
 }
