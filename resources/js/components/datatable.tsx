@@ -21,6 +21,7 @@ export function DataTable<TData, TValue>({ columns, data, paginatedData }: DataT
         getCoreRowModel: getCoreRowModel(),
         manualPagination: true,
         getPaginationRowModel: getPaginationRowModel(),
+        manualSorting: true,
     });
 
     return (

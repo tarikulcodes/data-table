@@ -36,8 +36,8 @@ export interface QueryParams {
     search?: string;
     page?: number;
     per_page?: number;
-    sort_by?: string;
-    sort_dir?: string;
+    sort_by?: string | null;
+    sort_dir?: 'asc' | 'desc' | null;
     [key: string]: unknown;
 }
 

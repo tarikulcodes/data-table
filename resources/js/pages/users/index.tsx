@@ -1,4 +1,5 @@
 import { DataTable } from '@/components/datatable';
+import { DataTableColumnHeader } from '@/components/datatable-column-header';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
@@ -10,8 +11,8 @@ import { Eye, Pencil, Plus, Trash2 } from 'lucide-react';
 const UsersIndex = ({ usersData }: { usersData: PaginatedData<User> }) => {
     const columns: ColumnDef<User>[] = [
         {
-            header: '#ID',
             accessorKey: 'id',
+            header: ({ column }) => <DataTableColumnHeader column={column} title="#ID" queryParams={usersData.queryParams} />,
             cell: ({ row }) => {
                 return <div className="">#{row.original.id}</div>;
             },
@@ -29,8 +30,8 @@ const UsersIndex = ({ usersData }: { usersData: PaginatedData<User> }) => {
             },
         },
         {
-            header: 'Name',
             accessorKey: 'name',
+            header: ({ column }) => <DataTableColumnHeader column={column} title="Name" queryParams={usersData.queryParams} />,
             cell: ({ row }) => {
                 return (
                     <div>
@@ -41,12 +42,12 @@ const UsersIndex = ({ usersData }: { usersData: PaginatedData<User> }) => {
             },
         },
         {
-            header: 'Created At',
             accessorKey: 'created_at',
+            header: ({ column }) => <DataTableColumnHeader column={column} title="Created At" queryParams={usersData.queryParams} />,
         },
         {
-            header: 'Updated At',
             accessorKey: 'updated_at',
+            header: ({ column }) => <DataTableColumnHeader column={column} title="Updated At" queryParams={usersData.queryParams} />,
         },
         {
             header: 'Actions',
