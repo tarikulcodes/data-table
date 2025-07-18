@@ -3,8 +3,8 @@ import { PaginatedData } from '@/types';
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
 import { DataTablePagination } from './datatable-pagination';
 
-// TODO: Add pagination
-// TODO: Add sorting
+// Done: Add pagination
+// Done: Add sorting
 // TODO: Add filtering
 // TODO: Add search
 // TODO: Add actions
