@@ -1,6 +1,7 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { PaginatedData } from '@/types';
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
+import DataTableFilters from './datatable-filters';
 import { DataTablePagination } from './datatable-pagination';
 
 // Done: Add pagination
@@ -26,6 +27,7 @@ export function DataTable<TData, TValue>({ columns, data, paginatedData }: DataT
 
     return (
         <div>
+            {paginatedData && <DataTableFilters className="mb-3" paginatedData={paginatedData} />}
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>
