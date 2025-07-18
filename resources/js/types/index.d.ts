@@ -57,17 +57,17 @@ export interface PaginationMeta {
 }
 
 export interface SimplePaginationLinks {
-    first: string;
-    last: string;
+    first: string | null;
+    last: string | null;
     next: string | null;
     prev: string | null;
 }
 
 export interface PaginatedData<T> {
     data: T[];
-    queryParams?: QueryParams;
-    meta?: PaginationMeta;
-    links?: SimplePaginationLinks;
+    queryParams: QueryParams;
+    meta: PaginationMeta;
+    links: SimplePaginationLinks;
 }
 
 export interface User {
