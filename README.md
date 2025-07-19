@@ -22,7 +22,7 @@ _Edit user page (Part of CRUD)_
 
 ## 🛠️ Tech Stack
 
-![Laravel](https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white) ![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white) ![Inertia](https://img.shields.io/badge/Inertia-9553E9?style=for-the-badge&logoColor=white) ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB) ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white) ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwindcss&logoColor=white) ![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![Laravel](https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white) ![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white) ![Inertia](https://img.shields.io/badge/Inertia-9553E9?style=for-the-badge&logoColor=white) ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB) ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white) ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwindcss&logoColor=white) ![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white) ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)
 
 ### Frontend Stack
 
@@ -217,6 +217,7 @@ If you prefer using Docker:
 - [Examples](#-examples)
 - [Customization](#-customization)
 - [Advanced Usage](#-advanced-usage)
+- [License](#-license)
 
 ## 🧩 Components Overview
 
@@ -785,6 +786,20 @@ To extend the datatable functionality:
 3. Add backend support if needed
 4. Update this documentation
 5. Test with the Users example
+
+## 📄 License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+### MIT License Summary
+
+✅ **Commercial use**  
+✅ **Modification**  
+✅ **Distribution**  
+✅ **Private use**
+
+❌ **Liability**  
+❌ **Warranty**
 
 ---
 
