@@ -2,7 +2,6 @@ import { DataTable } from '@/components/datatable';
 import { DataTableColumnHeader } from '@/components/datatable-column-header';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import AppLayout from '@/layouts/app-layout';
 import { PaginatedData, User } from '@/types';
 import { Head } from '@inertiajs/react';
@@ -11,21 +10,6 @@ import { Eye, Pencil, Plus } from 'lucide-react';
 
 const UsersIndex = ({ usersData }: { usersData: PaginatedData<User> }) => {
     const columns: ColumnDef<User>[] = [
-        {
-            id: 'select',
-            header: ({ table }) => (
-                <Checkbox
-                    checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
-                    onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                    aria-label="Select all"
-                />
-            ),
-            cell: ({ row }) => (
-                <Checkbox checked={row.getIsSelected()} onCheckedChange={(value) => row.toggleSelected(!!value)} aria-label="Select row" />
-            ),
-            enableSorting: false,
-            enableHiding: false,
-        },
         {
             accessorKey: 'id',
             header: ({ column }) => <DataTableColumnHeader column={column} title="#ID" queryParams={usersData.queryParams} />,
@@ -108,6 +92,7 @@ const UsersIndex = ({ usersData }: { usersData: PaginatedData<User> }) => {
                 columns={columns}
                 data={usersData.data}
                 paginatedData={usersData}
+                activeBulkActions={true}
                 bulkDelete={{
                     route: route('users.bulk-delete'),
                 }}

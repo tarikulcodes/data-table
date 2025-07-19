@@ -14,11 +14,13 @@ const DataTableToolbar = <TData,>({
     paginatedData,
     bulkActions = [],
     className,
+    activeBulkActions = false,
 }: {
     table: Table<TData>;
     paginatedData: PaginatedData<TData>;
     bulkActions?: BulkAction<TData>[];
     className?: string;
+    activeBulkActions?: boolean;
 }) => {
     const { queryParams } = paginatedData;
 
@@ -66,7 +68,7 @@ const DataTableToolbar = <TData,>({
                         onChange={(e) => handleDebouncedSearch(e.target.value)}
                     />
                 </div>
-                {bulkActions.length > 0 && (
+                {activeBulkActions && bulkActions.length > 0 && (
                     <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
                         <DropdownMenuTrigger asChild>
                             <Button variant="outline" className="uppercase" disabled={selectedRows.length === 0}>

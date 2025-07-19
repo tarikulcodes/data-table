@@ -8,6 +8,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { BulkAction, PaginatedData } from '@/types';
 import { router } from '@inertiajs/react';
@@ -32,15 +33,44 @@ interface DataTableProps<TData, TValue> {
         title?: string;
         description?: string;
     };
+    activeBulkActions?: boolean;
 }
 
-export function DataTable<TData, TValue>({ columns, data, paginatedData, bulkActions = [], bulkDelete }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({
+    columns,
+    data,
+    paginatedData,
+    bulkActions = [],
+    bulkDelete,
+    activeBulkActions = false,
+}: DataTableProps<TData, TValue>) {
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const [selectedItemsToDelete, setSelectedItemsToDelete] = useState<TData[]>([]);
 
+    // Add checkbox column if bulk actions are active
+    const allColumns = [...columns];
+    if (activeBulkActions) {
+        const checkboxColumn: ColumnDef<TData, TValue> = {
+            id: 'select',
+            header: ({ table }) => (
+                <Checkbox
+                    checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
+                    onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+                    aria-label="Select all"
+                />
+            ),
+            cell: ({ row }) => (
+                <Checkbox checked={row.getIsSelected()} onCheckedChange={(value) => row.toggleSelected(!!value)} aria-label="Select row" />
+            ),
+            enableSorting: false,
+            enableHiding: false,
+        };
+        allColumns.unshift(checkboxColumn);
+    }
+
     const table = useReactTable({
         data,
-        columns,
+        columns: allColumns,
         getCoreRowModel: getCoreRowModel(),
         manualPagination: true,
         getPaginationRowModel: getPaginationRowModel(),
@@ -79,7 +109,15 @@ export function DataTable<TData, TValue>({ columns, data, paginatedData, bulkAct
 
     return (
         <div>
-            {paginatedData && <DataTableToolbar table={table} paginatedData={paginatedData} className="mb-3" bulkActions={allBulkActions} />}
+            {paginatedData && (
+                <DataTableToolbar
+                    table={table}
+                    paginatedData={paginatedData}
+                    className="mb-3"
+                    bulkActions={allBulkActions}
+                    activeBulkActions={activeBulkActions}
+                />
+            )}
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>
@@ -106,7 +144,7 @@ export function DataTable<TData, TValue>({ columns, data, paginatedData, bulkAct
                             ))
                         ) : (
                             <TableRow>
-                                <TableCell colSpan={columns.length} className="h-24 text-center">
+                                <TableCell colSpan={allColumns.length} className="h-24 text-center">
                                     No results.
                                 </TableCell>
                             </TableRow>
