@@ -2,6 +2,24 @@
 
 A feature-rich, server-side data table implementation built with React, TanStack Table, Laravel, and Inertia.js. This data table provides pagination, sorting, search, bulk actions, and column visibility controls out of the box.
 
+## 📸 Demo
+
+<!-- Add your screenshots here -->
+
+![DataTable Overview](./screenshots/full-page.png)
+_Main datatable view with pagination, search, sorting, column visibility, bulk actions_
+
+<details>
+<summary>📱 More Screenshots</summary>
+
+![Search and Filtering](./screenshots/create-user-page.png)
+_Create user page (Part of CRUD)_
+
+![Bulk Actions](./screenshots/edit-user.png)
+_Edit user page (Part of CRUD)_
+
+</details>
+
 ## 🛠️ Tech Stack
 
 ![Laravel](https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white) ![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white) ![Inertia](https://img.shields.io/badge/Inertia-9553E9?style=for-the-badge&logoColor=white) ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB) ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white) ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwindcss&logoColor=white) ![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
@@ -187,6 +205,7 @@ If you prefer using Docker:
 
 ## 📋 Table of Contents
 
+- [Demo](#-demo)
 - [Tech Stack](#️-tech-stack)
 - [Getting Started](#-getting-started)
 - [Features](#-features)
