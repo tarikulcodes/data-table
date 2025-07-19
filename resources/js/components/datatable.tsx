@@ -1,20 +1,7 @@
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { BulkAction, PaginatedData } from '@/types';
-import { router } from '@inertiajs/react';
-import { Column, ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable, VisibilityState } from '@tanstack/react-table';
-import { Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { Column, ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
 import { DataTableColumnHeader } from './datatable-column-header';
 import { DataTablePagination } from './datatable-pagination';
 import DataTableToolbar from './datatable-toolbar';
@@ -45,9 +32,6 @@ export function DataTable<TData, TValue>({
     bulkDelete,
     activeBulkActions = false,
 }: DataTableProps<TData, TValue>) {
-    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-    const [selectedItemsToDelete, setSelectedItemsToDelete] = useState<TData[]>([]);
-
     // Add checkbox column if bulk actions are active
     const allColumns = [...columns];
     if (activeBulkActions) {
@@ -96,8 +80,6 @@ export function DataTable<TData, TValue>({
         return column;
     });
 
-    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-
     const table = useReactTable({
         data,
         columns: processedColumns,
@@ -105,41 +87,7 @@ export function DataTable<TData, TValue>({
         manualPagination: true,
         getPaginationRowModel: getPaginationRowModel(),
         manualSorting: true,
-        onColumnVisibilityChange: setColumnVisibility,
-        state: {
-            columnVisibility,
-        },
     });
-
-    // Add built-in delete action if bulkDelete is provided
-    const allBulkActions = [...bulkActions];
-    if (bulkDelete) {
-        allBulkActions.push({
-            label: 'Delete selected',
-            icon: Trash2,
-            className: 'text-destructive',
-            onClick: (selected) => {
-                setSelectedItemsToDelete(selected);
-                setShowDeleteDialog(true);
-            },
-        });
-    }
-
-    const handleBulkDelete = () => {
-        if (bulkDelete && selectedItemsToDelete.length > 0) {
-            router.delete(bulkDelete.route, {
-                data: {
-                    ids: selectedItemsToDelete.map((item) => (item as TData & { id: number }).id),
-                },
-                preserveScroll: true,
-                preserveState: false,
-            });
-            setShowDeleteDialog(false);
-            setSelectedItemsToDelete([]);
-            // Clear table selection
-            table.toggleAllPageRowsSelected(false);
-        }
-    };
 
     return (
         <div>
@@ -148,8 +96,9 @@ export function DataTable<TData, TValue>({
                     table={table}
                     paginatedData={paginatedData}
                     className="mb-3"
-                    bulkActions={allBulkActions}
+                    bulkActions={bulkActions}
                     activeBulkActions={activeBulkActions}
+                    bulkDelete={bulkDelete}
                 />
             )}
             <div className="rounded-md border">
@@ -191,26 +140,6 @@ export function DataTable<TData, TValue>({
                 <div className="mt-4">
                     <DataTablePagination table={table} paginatedData={paginatedData} />
                 </div>
-            )}
-
-            {/* Built-in Delete Dialog */}
-            {bulkDelete && (
-                <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-                    <AlertDialogContent className="max-w-sm lg:max-w-md">
-                        <AlertDialogHeader>
-                            <AlertDialogTitle>{bulkDelete.title || 'Delete selected items'}</AlertDialogTitle>
-                            <AlertDialogDescription>
-                                {bulkDelete.description || 'Are you sure you want to delete the selected items? This action cannot be undone.'}
-                            </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction className="bg-red-500 hover:bg-red-600" onClick={handleBulkDelete}>
-                                Delete
-                            </AlertDialogAction>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialog>
             )}
         </div>
     );
