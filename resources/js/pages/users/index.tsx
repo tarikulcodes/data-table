@@ -1,10 +1,11 @@
 import { DataTable } from '@/components/datatable';
+import SectionHeader from '@/components/section-header';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import { PaginatedData, User } from '@/types';
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { Eye, Pencil, Plus } from 'lucide-react';
 
@@ -100,15 +101,17 @@ const UsersIndex = ({ usersData }: { usersData: PaginatedData<User> }) => {
         >
             <Head title="Users" />
 
-            <div className="mb-2 flex flex-row justify-between gap-2">
-                <h2 className="text-2xl font-bold">Users</h2>
-                <div className="flex flex-row gap-2">
-                    <Button variant="outline">
-                        <Plus className="size-4" />
-                        Add User
+            <SectionHeader
+                title="Users"
+                actions={
+                    <Button variant="outline" asChild>
+                        <Link href={route('users.create')}>
+                            <Plus className="size-4" />
+                            Add User
+                        </Link>
                     </Button>
-                </div>
-            </div>
+                }
+            />
 
             {/* <pre>{JSON.stringify(usersData, null, 2)}</pre> */}
 
