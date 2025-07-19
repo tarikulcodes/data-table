@@ -1,21 +1,22 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { PaginatedData } from '@/types';
+import { BulkAction, PaginatedData } from '@/types';
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
-import DataTableFilters from './datatable-filters';
 import { DataTablePagination } from './datatable-pagination';
+import DataTableToolbar from './datatable-toolbar';
 
 // Done: Add pagination
 // Done: Add sorting
 // TODO: Add filtering
-// TODO: Add search
-// TODO: Add actions
+// Done: Add search
+// TODO: Add Bulk actions
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
     paginatedData?: PaginatedData<TData>;
+    bulkActions?: BulkAction<TData>[];
 }
 
-export function DataTable<TData, TValue>({ columns, data, paginatedData }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({ columns, data, paginatedData, bulkActions }: DataTableProps<TData, TValue>) {
     const table = useReactTable({
         data,
         columns,
@@ -27,7 +28,7 @@ export function DataTable<TData, TValue>({ columns, data, paginatedData }: DataT
 
     return (
         <div>
-            {paginatedData && <DataTableFilters className="mb-3" paginatedData={paginatedData} />}
+            {paginatedData && <DataTableToolbar table={table} paginatedData={paginatedData} className="mb-3" bulkActions={bulkActions} />}
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>

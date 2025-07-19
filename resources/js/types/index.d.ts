@@ -80,3 +80,10 @@ export interface User {
     updated_at: string;
     [key: string]: unknown;
 }
+
+export interface BulkAction<TData> {
+    label: string;
+    icon?: LucideIcon | IconType | null;
+    onClick: (selectedRows: TData[]) => void;
+    className?: string; // for styling (e.g. destructive)
+}

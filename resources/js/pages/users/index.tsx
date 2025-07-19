@@ -1,15 +1,45 @@
 import { DataTable } from '@/components/datatable';
 import { DataTableColumnHeader } from '@/components/datatable-column-header';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import AppLayout from '@/layouts/app-layout';
-import { PaginatedData, User } from '@/types';
-import { Head } from '@inertiajs/react';
+import { BulkAction, PaginatedData, User } from '@/types';
+import { Head, router } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { Eye, Pencil, Plus, Trash2 } from 'lucide-react';
+import { useState } from 'react';
 
 const UsersIndex = ({ usersData }: { usersData: PaginatedData<User> }) => {
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+    const [selectedItemsToDelete, setSelectedItemsToDelete] = useState<User[]>([]);
+
     const columns: ColumnDef<User>[] = [
+        {
+            id: 'select',
+            header: ({ table }) => (
+                <Checkbox
+                    checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
+                    onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+                    aria-label="Select all"
+                />
+            ),
+            cell: ({ row }) => (
+                <Checkbox checked={row.getIsSelected()} onCheckedChange={(value) => row.toggleSelected(!!value)} aria-label="Select row" />
+            ),
+            enableSorting: false,
+            enableHiding: false,
+        },
         {
             accessorKey: 'id',
             header: ({ column }) => <DataTableColumnHeader column={column} title="#ID" queryParams={usersData.queryParams} />,
@@ -70,6 +100,19 @@ const UsersIndex = ({ usersData }: { usersData: PaginatedData<User> }) => {
         },
     ];
 
+    const bulkActions: BulkAction<User>[] = [
+        {
+            label: 'Delete selected',
+            icon: Trash2,
+            className: 'text-destructive',
+            onClick: (selected) => {
+                setSelectedItemsToDelete(selected);
+                setShowDeleteDialog(true);
+            },
+        },
+        // Add more actions as needed
+    ];
+
     return (
         <AppLayout
             breadcrumbs={[
@@ -91,7 +134,36 @@ const UsersIndex = ({ usersData }: { usersData: PaginatedData<User> }) => {
 
             {/* <pre>{JSON.stringify(usersData, null, 2)}</pre> */}
 
-            <DataTable columns={columns} data={usersData.data} paginatedData={usersData} />
+            <DataTable columns={columns} data={usersData.data} paginatedData={usersData} bulkActions={bulkActions} />
+            <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+                <AlertDialogContent className="max-w-sm lg:max-w-md">
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Delete {selectedItemsToDelete.length} users</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Are you sure you want to delete {selectedItemsToDelete.length} users? This action cannot be undone.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                            className="bg-red-500 hover:bg-red-600"
+                            onClick={() => {
+                                router.delete(route('users.bulk-delete'), {
+                                    data: {
+                                        ids: selectedItemsToDelete.map((item) => item.id),
+                                    },
+                                    preserveScroll: true,
+                                    preserveState: false,
+                                });
+                                setShowDeleteDialog(false);
+                                setSelectedItemsToDelete([]);
+                            }}
+                        >
+                            Delete
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </AppLayout>
     );
 };

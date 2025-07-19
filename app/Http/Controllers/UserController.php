@@ -79,4 +79,16 @@ class UserController extends Controller
     {
         //
     }
+
+    public function bulkDelete(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:users,id',
+        ]);
+
+        User::whereIn('id', $request->ids)->delete();
+
+        return redirect()->route('users.index')->with('success', 'Users deleted successfully');
+    }
 }
