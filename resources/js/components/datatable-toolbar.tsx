@@ -66,27 +66,29 @@ const DataTableToolbar = <TData,>({
                         onChange={(e) => handleDebouncedSearch(e.target.value)}
                     />
                 </div>
-                <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="uppercase" disabled={selectedRows.length === 0}>
-                            Bulk actions ({selectedRows.length}) <ChevronDown className="size-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start" className="w-48">
-                        {bulkActions.map((action, idx) => (
-                            <DropdownMenuItem
-                                key={idx}
-                                className={action.className}
-                                onSelect={() => {
-                                    setDropdownOpen(false); // close dropdown
-                                    action.onClick(selectedRows); // open dialog
-                                }}
-                            >
-                                {action.icon && <action.icon className="size-4 text-inherit" />} {action.label}
-                            </DropdownMenuItem>
-                        ))}
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                {bulkActions.length > 0 && (
+                    <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="outline" className="uppercase" disabled={selectedRows.length === 0}>
+                                Bulk actions ({selectedRows.length}) <ChevronDown className="size-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="start" className="w-48">
+                            {bulkActions.map((action, idx) => (
+                                <DropdownMenuItem
+                                    key={idx}
+                                    className={action.className}
+                                    onSelect={() => {
+                                        setDropdownOpen(false); // close dropdown
+                                        action.onClick(selectedRows); // open dialog
+                                    }}
+                                >
+                                    {action.icon && <action.icon className="size-4 text-inherit" />} {action.label}
+                                </DropdownMenuItem>
+                            ))}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                )}
             </div>
             <div className="flex items-center gap-2"></div>
         </div>
