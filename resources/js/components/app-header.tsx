@@ -1,19 +1,15 @@
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { Icon } from '@/components/icon';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { NavigationMenu, NavigationMenuItem, NavigationMenuList, navigationMenuTriggerStyle } from '@/components/ui/navigation-menu';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { UserMenuContent } from '@/components/user-menu-content';
 import { Appearance, useAppearance } from '@/hooks/use-appearance';
-import { useInitials } from '@/hooks/use-initials';
 import { cn } from '@/lib/utils';
 import { type BreadcrumbItem, type NavItem, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { Separator } from '@radix-ui/react-separator';
-import { BookOpen, Home, LogIn, Menu, Monitor, Moon, Sun, User, UserPlus, Users } from 'lucide-react';
+import { BookOpen, Home, Menu, Monitor, Moon, Sun, Users } from 'lucide-react';
 import { FiGithub } from 'react-icons/fi';
 import AppLogo from './app-logo';
 import AppLogoIcon from './app-logo-icon';
@@ -52,8 +48,8 @@ interface AppHeaderProps {
 
 export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
     const page = usePage<SharedData>();
-    const { auth } = page.props;
-    const getInitials = useInitials();
+    // const { auth } = page.props;
+    // const getInitials = useInitials();
     return (
         <>
             <div className="border-b border-sidebar-border/80">
@@ -159,7 +155,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                             <Separator orientation="vertical" className="block h-5 min-h-5 w-0.5 bg-border" />
                             <ThemeSwitcher />
                         </div>
-                        <DropdownMenu>
+                        {/* <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" className="size-10 rounded-full p-1">
                                     {auth.user ? (
@@ -198,7 +194,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                                     </DropdownMenuGroup>
                                 )}
                             </DropdownMenuContent>
-                        </DropdownMenu>
+                        </DropdownMenu> */}
                     </div>
                 </div>
             </div>
