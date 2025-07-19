@@ -1,5 +1,6 @@
 import { Checkbox } from '@/components/ui/checkbox';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { useColumnVisibility } from '@/hooks/use-column-visibility';
 import { BulkAction, PaginatedData } from '@/types';
 import { Column, ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
 import { DataTableColumnHeader } from './datatable-column-header';
@@ -22,6 +23,7 @@ interface DataTableProps<TData, TValue> {
         description?: string;
     };
     activeBulkActions?: boolean;
+    tableKey?: string; // New prop for identifying the table for localStorage
 }
 
 export function DataTable<TData, TValue>({
@@ -31,7 +33,11 @@ export function DataTable<TData, TValue>({
     bulkActions = [],
     bulkDelete,
     activeBulkActions = false,
+    tableKey = 'default', // Default key if not provided
 }: DataTableProps<TData, TValue>) {
+    // Initialize column visibility hook
+    const { columnVisibility, setColumnVisibility, resetColumnVisibility } = useColumnVisibility(tableKey);
+
     // Add checkbox column if bulk actions are active
     const allColumns = [...columns];
     if (activeBulkActions) {
@@ -87,6 +93,10 @@ export function DataTable<TData, TValue>({
         manualPagination: true,
         getPaginationRowModel: getPaginationRowModel(),
         manualSorting: true,
+        state: {
+            columnVisibility,
+        },
+        onColumnVisibilityChange: setColumnVisibility,
     });
 
     return (
@@ -99,6 +109,7 @@ export function DataTable<TData, TValue>({
                     bulkActions={bulkActions}
                     activeBulkActions={activeBulkActions}
                     bulkDelete={bulkDelete}
+                    resetColumnVisibility={resetColumnVisibility}
                 />
             )}
             <div className="rounded-md border">

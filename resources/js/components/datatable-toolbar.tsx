@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils';
 import { BulkAction, PaginatedData } from '@/types';
 import { router } from '@inertiajs/react';
 import { Table } from '@tanstack/react-table';
-import { ArrowLeftRight, ChevronDown, Search, Trash2 } from 'lucide-react';
+import { ArrowLeftRight, ChevronDown, RotateCcw, Search, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import { Button } from './ui/button';
@@ -26,6 +26,7 @@ const DataTableToolbar = <TData,>({
     className,
     activeBulkActions = false,
     bulkDelete,
+    resetColumnVisibility,
 }: {
     table: Table<TData>;
     paginatedData: PaginatedData<TData>;
@@ -37,6 +38,7 @@ const DataTableToolbar = <TData,>({
         title?: string;
         description?: string;
     };
+    resetColumnVisibility?: () => void;
 }) => {
     const { queryParams } = paginatedData;
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -128,6 +130,13 @@ const DataTableToolbar = <TData,>({
                                         </DropdownMenuCheckboxItem>
                                     );
                                 })}
+                            {resetColumnVisibility && (
+                                <>
+                                    <DropdownMenuItem onSelect={() => resetColumnVisibility()} className="text-muted-foreground">
+                                        <RotateCcw className="size-4" /> Reset to default
+                                    </DropdownMenuItem>
+                                </>
+                            )}
                         </DropdownMenuContent>
                     </DropdownMenu>
                     {activeBulkActions && allBulkActions.length > 0 && (

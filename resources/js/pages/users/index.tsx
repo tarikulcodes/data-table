@@ -101,6 +101,7 @@ const UsersIndex = ({ usersData }: { usersData: PaginatedData<User> }) => {
                 bulkDelete={{
                     route: route('users.bulk-delete'),
                 }}
+                tableKey="users-table"
             />
         </AppLayout>
     );
