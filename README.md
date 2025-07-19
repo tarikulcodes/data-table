@@ -15,7 +15,7 @@ _Main datatable view with pagination, search, sorting, column visibility, bulk a
 ![Search and Filtering](./screenshots/create-user-page.png)
 _Create user page (Part of CRUD)_
 
-![Bulk Actions](./screenshots/edit-user.png)
+![Bulk Actions](./screenshots/edit-user-page.png)
 _Edit user page (Part of CRUD)_
 
 </details>
