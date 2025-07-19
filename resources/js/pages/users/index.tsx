@@ -1,13 +1,24 @@
 import { DataTable } from '@/components/datatable';
 import SectionHeader from '@/components/section-header';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import { PaginatedData, User } from '@/types';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
-import { Eye, Pencil, Plus } from 'lucide-react';
+import { Eye, Pencil, Plus, Trash } from 'lucide-react';
 
 const ROLE_COLORS = {
     admin: 'border-blue-500 text-blue-500 ',
@@ -16,6 +27,10 @@ const ROLE_COLORS = {
 };
 
 const UsersIndex = ({ usersData }: { usersData: PaginatedData<User> }) => {
+    const handleDeleteUser = (userId: number) => {
+        router.delete(route('users.destroy', userId));
+    };
+
     const columns: (ColumnDef<User> & { enable_sorting?: boolean })[] = [
         {
             accessorKey: 'id',
@@ -90,6 +105,28 @@ const UsersIndex = ({ usersData }: { usersData: PaginatedData<User> }) => {
                                 <Pencil className="size-4" />
                             </Link>
                         </Button>
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <Button variant="ghost" size="icon" className="size-8 text-red-500">
+                                    <Trash className="size-4" />
+                                </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        This action cannot be undone. This will permanently delete the user "{row.original.name}" and remove their
+                                        data from our servers.
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogAction onClick={() => handleDeleteUser(row.original.id)} className="bg-red-600 hover:bg-red-700">
+                                        Delete
+                                    </AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
                     </div>
                 );
             },
