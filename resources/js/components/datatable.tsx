@@ -12,9 +12,10 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { BulkAction, PaginatedData } from '@/types';
 import { router } from '@inertiajs/react';
-import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
+import { Column, ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
 import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
+import { DataTableColumnHeader } from './datatable-column-header';
 import { DataTablePagination } from './datatable-pagination';
 import DataTableToolbar from './datatable-toolbar';
 
@@ -24,7 +25,7 @@ import DataTableToolbar from './datatable-toolbar';
 // Done: Add search
 // Done: Add Bulk actions
 interface DataTableProps<TData, TValue> {
-    columns: ColumnDef<TData, TValue>[];
+    columns: (ColumnDef<TData, TValue> & { enable_sorting?: boolean })[];
     data: TData[];
     paginatedData?: PaginatedData<TData>;
     bulkActions?: BulkAction<TData>[];
@@ -50,7 +51,7 @@ export function DataTable<TData, TValue>({
     // Add checkbox column if bulk actions are active
     const allColumns = [...columns];
     if (activeBulkActions) {
-        const checkboxColumn: ColumnDef<TData, TValue> = {
+        const checkboxColumn: ColumnDef<TData, TValue> & { enable_sorting?: boolean } = {
             id: 'select',
             header: ({ table }) => (
                 <Checkbox
@@ -64,13 +65,40 @@ export function DataTable<TData, TValue>({
             ),
             enableSorting: false,
             enableHiding: false,
+            enable_sorting: false,
         };
         allColumns.unshift(checkboxColumn);
     }
 
+    // Process columns to add sorting headers if enable_sorting is true
+    const processedColumns = allColumns.map((column) => {
+        // Skip if enable_sorting is not true or no paginatedData
+        if (!column.enable_sorting || !paginatedData) {
+            return column;
+        }
+
+        // If column already has a custom header function, preserve it
+        if (typeof column.header === 'function') {
+            return column;
+        }
+
+        // Add sorting header for simple string headers
+        if ('accessorKey' in column) {
+            const columnWithAccessor = column as ColumnDef<TData, TValue> & { accessorKey: string; enable_sorting?: boolean };
+            return {
+                ...column,
+                header: ({ column: col }: { column: Column<TData, unknown> }) => (
+                    <DataTableColumnHeader column={col} title={columnWithAccessor.accessorKey} queryParams={paginatedData.queryParams} />
+                ),
+            };
+        }
+
+        return column;
+    });
+
     const table = useReactTable({
         data,
-        columns: allColumns,
+        columns: processedColumns,
         getCoreRowModel: getCoreRowModel(),
         manualPagination: true,
         getPaginationRowModel: getPaginationRowModel(),
@@ -144,7 +172,7 @@ export function DataTable<TData, TValue>({
                             ))
                         ) : (
                             <TableRow>
-                                <TableCell colSpan={allColumns.length} className="h-24 text-center">
+                                <TableCell colSpan={processedColumns.length} className="h-24 text-center">
                                     No results.
                                 </TableCell>
                             </TableRow>

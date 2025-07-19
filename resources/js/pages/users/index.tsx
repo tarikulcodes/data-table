@@ -1,5 +1,4 @@
 import { DataTable } from '@/components/datatable';
-import { DataTableColumnHeader } from '@/components/datatable-column-header';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
@@ -9,10 +8,11 @@ import { ColumnDef } from '@tanstack/react-table';
 import { Eye, Pencil, Plus } from 'lucide-react';
 
 const UsersIndex = ({ usersData }: { usersData: PaginatedData<User> }) => {
-    const columns: ColumnDef<User>[] = [
+    const columns: (ColumnDef<User> & { enable_sorting?: boolean })[] = [
         {
             accessorKey: 'id',
-            header: ({ column }) => <DataTableColumnHeader column={column} title="#ID" queryParams={usersData.queryParams} />,
+            header: '#ID',
+            enable_sorting: true,
             cell: ({ row }) => {
                 return <div className="">#{row.original.id}</div>;
             },
@@ -20,6 +20,7 @@ const UsersIndex = ({ usersData }: { usersData: PaginatedData<User> }) => {
         {
             header: 'Avatar',
             accessorKey: 'avatar',
+            enable_sorting: false,
             cell: ({ row }) => {
                 return (
                     <Avatar className="size-10">
@@ -31,7 +32,8 @@ const UsersIndex = ({ usersData }: { usersData: PaginatedData<User> }) => {
         },
         {
             accessorKey: 'name',
-            header: ({ column }) => <DataTableColumnHeader column={column} title="Name" queryParams={usersData.queryParams} />,
+            header: 'Name',
+            enable_sorting: true,
             cell: ({ row }) => {
                 return (
                     <div>
@@ -43,15 +45,18 @@ const UsersIndex = ({ usersData }: { usersData: PaginatedData<User> }) => {
         },
         {
             accessorKey: 'created_at',
-            header: ({ column }) => <DataTableColumnHeader column={column} title="Created At" queryParams={usersData.queryParams} />,
+            header: 'Created At',
+            enable_sorting: true,
         },
         {
             accessorKey: 'updated_at',
-            header: ({ column }) => <DataTableColumnHeader column={column} title="Updated At" queryParams={usersData.queryParams} />,
+            header: 'Updated At',
+            enable_sorting: true,
         },
         {
             header: 'Actions',
             accessorKey: 'actions',
+            enable_sorting: false,
             cell: ({ row }) => {
                 return (
                     <div className="flex flex-row gap-0.5" key={row.original.id}>
