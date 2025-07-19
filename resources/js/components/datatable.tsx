@@ -12,7 +12,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { BulkAction, PaginatedData } from '@/types';
 import { router } from '@inertiajs/react';
-import { Column, ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
+import { Column, ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable, VisibilityState } from '@tanstack/react-table';
 import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { DataTableColumnHeader } from './datatable-column-header';
@@ -96,6 +96,8 @@ export function DataTable<TData, TValue>({
         return column;
     });
 
+    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+
     const table = useReactTable({
         data,
         columns: processedColumns,
@@ -103,6 +105,10 @@ export function DataTable<TData, TValue>({
         manualPagination: true,
         getPaginationRowModel: getPaginationRowModel(),
         manualSorting: true,
+        onColumnVisibilityChange: setColumnVisibility,
+        state: {
+            columnVisibility,
+        },
     });
 
     // Add built-in delete action if bulkDelete is provided

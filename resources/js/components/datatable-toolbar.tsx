@@ -1,9 +1,9 @@
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import { BulkAction, PaginatedData } from '@/types';
 import { router } from '@inertiajs/react';
 import { Table } from '@tanstack/react-table';
-import { ChevronDown, Search } from 'lucide-react';
+import { ArrowLeftRight, ChevronDown, Search } from 'lucide-react';
 import { useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import { Button } from './ui/button';
@@ -58,20 +58,34 @@ const DataTableToolbar = <TData,>({
     return (
         <div className={cn('flex items-center justify-between gap-4', className)}>
             <div className="flex items-center gap-2">
-                <div className="relative">
-                    <Search className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
-                    <Input
-                        type="search"
-                        placeholder="Search..."
-                        className="max-w-sm pl-8"
-                        defaultValue={queryParams.search ?? ''}
-                        onChange={(e) => handleDebouncedSearch(e.target.value)}
-                    />
-                </div>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="outline" className="ml-auto">
+                            <ArrowLeftRight className="size-3.5" /> Columns
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start">
+                        {table
+                            .getAllColumns()
+                            .filter((column) => column.getCanHide())
+                            .map((column) => {
+                                return (
+                                    <DropdownMenuCheckboxItem
+                                        key={column.id}
+                                        className="capitalize"
+                                        checked={column.getIsVisible()}
+                                        onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                                    >
+                                        {column.id}
+                                    </DropdownMenuCheckboxItem>
+                                );
+                            })}
+                    </DropdownMenuContent>
+                </DropdownMenu>
                 {activeBulkActions && bulkActions.length > 0 && (
                     <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="outline" className="uppercase" disabled={selectedRows.length === 0}>
+                            <Button variant="outline" className="capitalize" disabled={selectedRows.length === 0}>
                                 Bulk actions ({selectedRows.length}) <ChevronDown className="size-4" />
                             </Button>
                         </DropdownMenuTrigger>
@@ -92,7 +106,18 @@ const DataTableToolbar = <TData,>({
                     </DropdownMenu>
                 )}
             </div>
-            <div className="flex items-center gap-2"></div>
+            <div className="flex items-center gap-2">
+                <div className="relative">
+                    <Search className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
+                    <Input
+                        type="search"
+                        placeholder="Search..."
+                        className="max-w-sm pl-8"
+                        defaultValue={queryParams.search ?? ''}
+                        onChange={(e) => handleDebouncedSearch(e.target.value)}
+                    />
+                </div>
+            </div>
         </div>
     );
 };

@@ -81,7 +81,7 @@ const UsersIndex = ({ usersData }: { usersData: PaginatedData<User> }) => {
         >
             <Head title="Users" />
 
-            <div className="flex flex-row justify-between gap-4">
+            <div className="mb-2 flex flex-row justify-between gap-2">
                 <h2 className="text-2xl font-bold">Users</h2>
                 <div className="flex flex-row gap-2">
                     <Button variant="outline">
