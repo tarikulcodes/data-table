@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -67,17 +68,30 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(User $user)
     {
-        //
+        return Inertia::render('users/edit', [
+            'user' => new UserResource($user),
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        //
+        $inputs = $request->validated();
+
+        if ($inputs['password']) {
+            $inputs['password'] = Hash::make($inputs['password']);
+        } else {
+            unset($inputs['password']);
+            unset($inputs['password_confirmation']);
+        }
+
+        $user->update($inputs);
+
+        return to_route('users.index')->with('success', 'User updated successfully');
     }
 
     /**

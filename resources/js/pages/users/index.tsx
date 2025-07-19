@@ -80,11 +80,15 @@ const UsersIndex = ({ usersData }: { usersData: PaginatedData<User> }) => {
             cell: ({ row }) => {
                 return (
                     <div className="flex flex-row gap-0.5" key={row.original.id}>
-                        <Button variant="ghost" size="icon" className="size-8 text-blue-500">
-                            <Eye className="size-4" />
+                        <Button variant="ghost" size="icon" className="size-8 text-blue-500" asChild>
+                            <Link href={route('users.show', row.original.id)}>
+                                <Eye className="size-4" />
+                            </Link>
                         </Button>
-                        <Button variant="ghost" size="icon" className="size-8 text-green-500">
-                            <Pencil className="size-4" />
+                        <Button variant="ghost" size="icon" className="size-8 text-green-500" asChild>
+                            <Link href={route('users.edit', row.original.id)}>
+                                <Pencil className="size-4" />
+                            </Link>
                         </Button>
                     </div>
                 );
