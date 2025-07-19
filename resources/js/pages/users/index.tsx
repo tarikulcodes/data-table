@@ -1,11 +1,18 @@
 import { DataTable } from '@/components/datatable';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import { PaginatedData, User } from '@/types';
 import { Head } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { Eye, Pencil, Plus } from 'lucide-react';
+
+const ROLE_COLORS = {
+    admin: 'border-blue-500 text-blue-500 ',
+    manager: 'border-green-500 text-green-500 ',
+    user: 'border-gray-500 text-gray-500 ',
+};
 
 const UsersIndex = ({ usersData }: { usersData: PaginatedData<User> }) => {
     const columns: (ColumnDef<User> & { enable_sorting?: boolean })[] = [
@@ -40,6 +47,18 @@ const UsersIndex = ({ usersData }: { usersData: PaginatedData<User> }) => {
                         <h2 className="text-base font-semibold">{row.original.name}</h2>
                         <p className="text-sm text-gray-500">{row.original.email}</p>
                     </div>
+                );
+            },
+        },
+        {
+            accessorKey: 'role',
+            header: 'Role',
+            enable_sorting: true,
+            cell: ({ row }) => {
+                return (
+                    <Badge variant="outline" className={`capitalize ${ROLE_COLORS[row.original.role as keyof typeof ROLE_COLORS]}`}>
+                        {row.original.role}
+                    </Badge>
                 );
             },
         },

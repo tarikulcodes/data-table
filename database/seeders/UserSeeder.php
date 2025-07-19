@@ -14,14 +14,35 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::firstOrCreate([
-            'email' => 'user@test.com',
-        ], [
-            'name' => 'User Test',
-            'email' => 'user@test.com',
-            'email_verified_at' => now(),
-            'password' => Hash::make('password'),
-        ]);
+        $testUsers = [
+            [
+                'name' => 'Admin Test',
+                'email' => 'admin@test.com',
+                'role' => 'admin',
+                'email_verified_at' => now(),
+                'password' => Hash::make('password'),
+            ],
+            [
+                'name' => 'Manager Test',
+                'email' => 'manager@test.com',
+                'role' => 'manager',
+                'email_verified_at' => now(),
+                'password' => Hash::make('password'),
+            ],
+            [
+                'name' => 'User Test',
+                'email' => 'user@test.com',
+                'role' => 'user',
+                'email_verified_at' => now(),
+                'password' => Hash::make('password'),
+            ]
+        ];
+
+        foreach ($testUsers as $user) {
+            User::firstOrCreate([
+                'email' => $user['email'],
+            ], $user);
+        }
         User::factory(50)->create();
     }
 }
